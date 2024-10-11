@@ -101,8 +101,9 @@ public class SellTicketsController implements Initializable {
     public void onSelectSeatsClick()
     {
         try {
+            Showing selectedShowing = showingsTableView.getSelectionModel().getSelectedItem();
             FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource("selectseats-view.fxml"));
-            SelectSeatsController selectSeatsController = new SelectSeatsController();
+            SelectSeatsController selectSeatsController = new SelectSeatsController(selectedShowing, database, layout);
             loader.setController(selectSeatsController);
             Scene newScene = new Scene(loader.load());
             layout.getChildren().clear();

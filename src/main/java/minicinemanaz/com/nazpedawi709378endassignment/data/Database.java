@@ -1,4 +1,5 @@
 package minicinemanaz.com.nazpedawi709378endassignment.data;
+import minicinemanaz.com.nazpedawi709378endassignment.models.Sale;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
 import minicinemanaz.com.nazpedawi709378endassignment.models.User;
 import minicinemanaz.com.nazpedawi709378endassignment.models.UserRole;
@@ -15,6 +16,7 @@ public class Database implements Serializable {
 
     private List<User> users;
     private List<Showing> showings;
+    private List<Sale> sales;
 
     public Database() {
         users = new ArrayList<>();
@@ -22,6 +24,7 @@ public class Database implements Serializable {
         users.add(new User("David", "Brooks", "DavidBrooks", "Dav!dbrooks", UserRole.Sales));
 
         showings = new ArrayList<>();
+        sales = new ArrayList<>();
         load();
     }
 
@@ -31,6 +34,9 @@ public class Database implements Serializable {
 
     public List<Showing> getShowings() {
         return showings;
+    }
+    public List<Sale> getSales() {
+        return sales; // Method to get sales history
     }
 
     public User findUser(String username, String password) {
@@ -95,5 +101,10 @@ public class Database implements Serializable {
             }
         }
         System.out.println("Showing not found. No update performed.");
+    }
+
+    public void addSale(Sale sale) {
+        sales.add(sale); // Add a sales record to the list
+        save(); // Persist the updated data
     }
 }

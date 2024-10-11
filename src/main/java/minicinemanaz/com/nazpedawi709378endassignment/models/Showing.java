@@ -66,4 +66,12 @@ public class Showing implements Serializable, Comparable<Showing> {
     public int compareTo(Showing other) {
         return this.startDate.compareTo(other.startDate);
     }
+
+    public void reduceSeats(int numberOfTickets) {
+        if (numberOfTickets <= seatsLeft) {
+            seatsLeft -= numberOfTickets;
+        } else {
+            throw new IllegalArgumentException("Not enough seats available.");
+        }
+    }
 }

@@ -3,35 +3,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox  style="-fx-spacing: 10;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label text="Label" />
-      <Label text="Label" />
-      <HBox prefHeight="40.0" prefWidth="600.0" spacing="-Infinity">
-          <Label text="---------------------- View Screen --------------" />
-          <Label text="Selected Seats" />
+      <Label text="Sell Tickets"  style="-fx-font-size: 18;" />
+      <Label fx:id="selectedShowingLabel" style="-fx-font-weight: bold;"/>
+
+      <HBox prefHeight="10.0" alignment="CENTER">
+          <Label text="---------------------- View Screen -----------------" style="-fx-font-weight: bold; -fx-text-fill: black;"/>
+          <Label text="Selected Seats" style="-fx-font-weight: bold; -fx-text-fill: black; -fx-padding: 0 0 0 50;" />
       </HBox>
-             <HBox>
+             <HBox HBox.hgrow="ALWAYS">
                  <children>
-            <GridPane prefHeight="141.0" prefWidth="286.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <GridPane fx:id="seatsGrid" hgap="10" vgap="10" style="-fx-padding: 20;" HBox.hgrow="ALWAYS">
             </GridPane>
-                 <ListView prefHeight="257.0" prefWidth="170.0" />
+                 <ListView fx:id="selectedSeatsListView" prefHeight="100.0" prefWidth="130.0"   style="-fx-border-color: black; -fx-border-width: 1;" />
          </children>
       </HBox>
-      <TextField />
+      <TextField fx:id="customerNameField" promptText="Customer Name" style="-fx-padding: 10;"/>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" style="-fx-background-color: #007BFF; -fx-text-fill: white;" text="Button" />
-            <Button mnemonicParsing="false" style="-fx-background-color: #808080; -fx-text-fill: white;" text="Cancel" />
+            <Button fx:id="sellTicketsButton" onAction="#onSellTicketsClick" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-cursor: hand;" />
+            <Button fx:id="cancelButton" onAction="#onCancelClick" style="-fx-background-color: #808080; -fx-text-fill: white; -fx-cursor: hand;" text="Cancel"/>
          </children>
       </HBox>
    </children>
