@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox style="-fx-padding: 20;" alignment="CENTER" prefHeight="315.0" prefWidth="609.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+            <Label fx:id="manageShowingsLabel" alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="25.0" style="-fx-font-size: 24;" text="Manage Showings" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            </Label>
+            <Label fx:id="roomLabel" alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="18.0" prefWidth="569.0" style="-fx-font-size: 18; -fx-background-color: green; -fx-text-fill: white; -fx-padding: 2 10;" text="Room 1" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
+            </Label>
+            <TableView fx:id="showingsTableView" onMouseClicked="#handleTableClick" editable="true">
+                <columns>
+                    <TableColumn fx:id="startDateColumn" prefWidth="130" style="-fx-alignment: CENTER_LEFT;" text="Start">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startDate" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="endDateColumn" prefWidth="130" style="-fx-alignment: CENTER_LEFT;" text="End">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endDate" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="titleColumn" prefWidth="230" style="-fx-alignment: CENTER_LEFT;" text="Title">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="title" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="seatsLeftColumn" prefWidth="80" style="-fx-alignment: CENTER_LEFT;" text="Seats Left">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="seatsLeft" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 15 0 0 0;">
+                <Button fx:id="addShowingButton" onAction="#onAddShowingClick" style="-fx-background-color: blue; -fx-text-fill: white; -fx-padding: 5;" text="Add Showing">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="editShowingButton" onAction="#onEditShowingClick" style="-fx-background-color: green; -fx-text-fill: white; -fx-padding: 5;" text="Edit Showing">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="deleteShowingButton" onAction="#onDeleteShowingClick" style="-fx-background-color: red; -fx-text-fill: white; -fx-padding: 5;" text="Delete Showing">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                <Label fx:id="errorMessageLabel" alignment="CENTER_LEFT" style="-fx-font-weight: bold;" textFill="red" />
+            </HBox>
+        </children>
+    </VBox>

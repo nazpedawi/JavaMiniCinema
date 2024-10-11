@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER_LEFT" prefHeight="282.0" prefWidth="399.0" spacing="10" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+                <Label fx:id="dialogTitleLabel" style="-fx-font-size: 18;" />
+
+                <Label text="Title" />
+                <TextField fx:id="titleField" onKeyPressed="#handleKeyPress" />
+
+                <Label text="Start Date/Time" />
+                <HBox spacing="10">
+                    <DatePicker fx:id="startDatePicker" onKeyPressed="#handleKeyPress" promptText="Date (DD-MM-YYYY)" />
+                    <TextField fx:id="startTimeField" onKeyPressed="#handleKeyPress" promptText="Time (HH:MM)" />
+                </HBox>
+
+                <Label text="End Date/Time" />
+                <HBox spacing="10">
+                    <DatePicker fx:id="endDatePicker" onKeyPressed="#handleKeyPress" promptText="Date (DD-MM-YYYY)" />
+                    <TextField fx:id="endTimeField" onKeyPressed="#handleKeyPress" promptText="Time (HH:MM)" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="373.0" spacing="20">
+                    <Button fx:id="confirmButton" onAction="#onConfirmButtonClick" style="-fx-background-color: blue" textFill="WHITE">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    </Button>
+                    <Button fx:id="cancelButton" cancelButton="true" onAction="#onCancelButtonClick" prefHeight="25.0" prefWidth="68.0" style="-fx-background-color: gray" text="Cancel" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+                    </Button>
+                    <Label fx:id="errorMessageLabel" textFill="#d92323">
+                     <font>
+                         <Font name="System Bold" size="10.0" />
+                     </font>
+                    </Label>
+                </HBox>
+    </children>
+</VBox>

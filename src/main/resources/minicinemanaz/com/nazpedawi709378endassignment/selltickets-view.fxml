@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.text.Font?>
+
+    <VBox fx:id="layout" alignment="CENTER" prefHeight="315.0" prefWidth="609.0" style="-fx-padding: 20;" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+            <Label fx:id="sellTicketsLabel" alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="25.0" style="-fx-font-size: 24;" text="Sell Tickets" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            </Label>
+            <Label fx:id="roomLabel" alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="18.0" prefWidth="569.0" style="-fx-font-size: 18; -fx-background-color: green; -fx-text-fill: white; -fx-padding: 2 10;" text="Room 1" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
+            </Label>
+            <TableView fx:id="showingsTableView" onMouseClicked="#handleTableClick" editable="true">
+                <columns>
+                    <TableColumn fx:id="startDateColumn" prefWidth="130" style="-fx-alignment: CENTER_LEFT;" text="Start">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startDate" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="endDateColumn" prefWidth="130" style="-fx-alignment: CENTER_LEFT;" text="End">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endDate" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="titleColumn" prefWidth="230" style="-fx-alignment: CENTER_LEFT;" text="Title">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="title" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="seatsLeftColumn" prefWidth="80" style="-fx-alignment: CENTER_LEFT;" text="Seats Left">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="seatsLeft" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                <Label fx:id="selectedShowingLabel" alignment="CENTER_LEFT" style="-fx-font-weight: bold; -fx-padding: 10;" textFill="red" />
+            </HBox>
+
+                <Button fx:id="selectSeatsButton" onAction="#onSelectSeatsClick" style="-fx-background-color: blue; -fx-text-fill: white; -fx-padding: 10;" text="Select Seat(s)">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+            </Button>
+        </children>
+    </VBox>

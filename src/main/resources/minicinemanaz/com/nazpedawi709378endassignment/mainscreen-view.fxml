@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="-Infinity" fx:id="layout" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="minicinemanaz.com.nazpedawi709378endassignment.controllers.MainScreenController">
+    <children>
+        <HBox prefHeight="78.0" style="-fx-background-color: black;">
+            <children>
+                <ImageView fitHeight="80.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@icon.png" />
+                    </image>
+                </ImageView>
+                <Label prefHeight="80.0" prefWidth="134.0" text="Fantastic Cinema" textFill="WHITE" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <HBox fx:id="buttonContainer" alignment="BOTTOM_RIGHT" prefHeight="40.0" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets left="20.0" /> <!-- Left padding added here -->
+                    </padding>
+                    <children>
+                                <Button fx:id="sellTicketsButton" onAction="#onSellTicketsClick" prefHeight="30.0" prefWidth="96.0" style="-fx-background-color: green; -fx-border-color: transparent black transparent transparent; -fx-border-width: 0 1 0 0;" text="Sell Tickets" textFill="WHITE">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="manageShowingsButton" onAction="#onManageShowingsClick" style="-fx-background-color: green; -fx-border-color: transparent black transparent transparent; -fx-border-width: 0 1 0 0;" text="Manage Showings" textFill="WHITE">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="viewSalesHistoryButton" style="-fx-background-color: green;" text="View Sales History" textFill="WHITE">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Button>
+                    </children>
+                    <HBox.margin>
+                        <Insets right="20.0" />
+                    </HBox.margin>
+                </HBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>
