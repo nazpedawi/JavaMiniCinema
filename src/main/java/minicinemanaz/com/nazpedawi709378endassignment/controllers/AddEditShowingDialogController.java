@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import minicinemanaz.com.nazpedawi709378endassignment.data.Database;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
+import minicinemanaz.com.nazpedawi709378endassignment.models.Seat;
 import javafx.scene.control.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddEditShowingDialogController {
     @FXML
@@ -123,8 +126,10 @@ public class AddEditShowingDialogController {
             errorMessageLabel.setText("Validation failed: Start time must be before end time.");
         }
 
+        List<Seat> seats = initializeSeats();
+
         if (currentShowing == null) {
-            showing = new Showing(title, startDate.atTime(startTime), endDate.atTime(endTime));
+            showing = new Showing(title, startDate.atTime(startTime), endDate.atTime(endTime),  seats);
             database.addShowing(showing);
         } else {
 
@@ -132,6 +137,7 @@ public class AddEditShowingDialogController {
             currentShowing.setTitle(title);
             currentShowing.setStartDate(startDate.atTime(startTime));
             currentShowing.setEndDate(endDate.atTime(endTime));
+            currentShowing.getSeats();
             database.updateShowing(currentShowing);
         }
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -158,6 +164,20 @@ public class AddEditShowingDialogController {
     private void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    private List<Seat> initializeSeats() {
+        List<Seat> seats = new ArrayList<>();
+        int rows = 6;
+        int cols = 12;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Seat seat = new Seat(row + 1, col + 1, false); // Assuming you have a constructor that takes row and column
+                seats.add(seat);
+            }
+        }
+        return seats;
     }
 
 }

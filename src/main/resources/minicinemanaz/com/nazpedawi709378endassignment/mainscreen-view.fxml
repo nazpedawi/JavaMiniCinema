@@ -42,7 +42,7 @@
                                         <Font size="15.0" />
                                     </font>
                                 </Button>
-                                <Button fx:id="viewSalesHistoryButton" style="-fx-background-color: green;" text="View Sales History" textFill="WHITE">
+                                <Button fx:id="viewSalesHistoryButton" onAction="#onViewSalesHistoryClick" style="-fx-background-color: green;" text="View Sales History" textFill="WHITE">
                                     <cursor>
                                         <Cursor fx:constant="HAND" />
                                     </cursor>

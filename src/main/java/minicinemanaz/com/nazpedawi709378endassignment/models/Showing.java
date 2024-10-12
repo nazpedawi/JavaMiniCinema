@@ -2,6 +2,7 @@ package minicinemanaz.com.nazpedawi709378endassignment.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class Showing implements Serializable, Comparable<Showing> {
@@ -12,13 +13,16 @@ public class Showing implements Serializable, Comparable<Showing> {
     private int seatsLeft;
     private final int maxSeats = 72;
     private String id;
+    private List<Seat> seats;
 
-    public Showing(String title, LocalDateTime startDate, LocalDateTime endDate) {
+    public Showing(String title, LocalDateTime startDate, LocalDateTime endDate, List<Seat> seats) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.seatsLeft = maxSeats;
+        this.seats = seats;
+        this.seatsLeft = seats.size();
     }
 
     public String getId() {
@@ -61,17 +65,15 @@ public class Showing implements Serializable, Comparable<Showing> {
     public void setSeatsLeft(int seatsLeft) {
         this.seatsLeft = seatsLeft;
     }
+    public List<Seat> getSeats() {
+        return seats;
+    }
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
 
     @Override
     public int compareTo(Showing other) {
         return this.startDate.compareTo(other.startDate);
-    }
-
-    public void reduceSeats(int numberOfTickets) {
-        if (numberOfTickets <= seatsLeft) {
-            seatsLeft -= numberOfTickets;
-        } else {
-            throw new IllegalArgumentException("Not enough seats available.");
-        }
     }
 }

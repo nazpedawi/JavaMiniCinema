@@ -1,8 +1,5 @@
 package minicinemanaz.com.nazpedawi709378endassignment.data;
-import minicinemanaz.com.nazpedawi709378endassignment.models.Sale;
-import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
-import minicinemanaz.com.nazpedawi709378endassignment.models.User;
-import minicinemanaz.com.nazpedawi709378endassignment.models.UserRole;
+import minicinemanaz.com.nazpedawi709378endassignment.models.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +25,25 @@ public class Database implements Serializable {
         load();
     }
 
+    // Method to get a showing by ID
+    public Showing getShowingById(String showingId) {
+        for (Showing showing : showings) {
+            if (showing.getId().equals(showingId)) {
+                return showing;
+            }
+        }
+        return null;
+    }
+    public void reserveSeats(Showing showing, List<Seat> seatsToReserve) {
+        // Update the reserved status of seats
+        for (Seat seat : seatsToReserve) {
+            seat.setReserved(true); // Mark seat as reserved
+        }
+        int newSeatsLeft = showing.getSeatsLeft() - seatsToReserve.size();
+        showing.setSeatsLeft(newSeatsLeft); // Update seats left
+        updateShowing(showing);
+    }
+
     public List<User> getUsers() {
         return users;
     }
@@ -36,7 +52,7 @@ public class Database implements Serializable {
         return showings;
     }
     public List<Sale> getSales() {
-        return sales; // Method to get sales history
+        return sales;
     }
 
     public User findUser(String username, String password) {
@@ -60,8 +76,9 @@ public class Database implements Serializable {
     private void load() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
             Database loadedDatabase = (Database) ois.readObject();
-            this.showings = loadedDatabase.showings; // Load showings
-            System.out.println("Database loaded successfully. Loaded " + showings.size() + " showings.");
+            this.showings = loadedDatabase.showings;
+            this.sales = loadedDatabase.sales;
+            System.out.println("Database loaded successfully. Loaded " + showings.size() + " showings." + sales.size() + " sales.");
         } catch (FileNotFoundException e) {
             System.out.println("No previous database found. A new one will be created.");
         } catch (IOException | ClassNotFoundException e) {

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<VBox alignment="CENTER" prefHeight="315.0" prefWidth="609.0" style="-fx-padding: 20;" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="25.0" style="-fx-font-size: 24;" text="Sales History" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        </Label>
+        <Label fx:id="roomLabel" alignment="CENTER_LEFT" maxWidth="Infinity" prefHeight="18.0" prefWidth="569.0" style="-fx-font-size: 18; -fx-background-color: green; -fx-text-fill: white; -fx-padding: 2 10;" text="Room 1" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
+        </Label>
+        <TableView fx:id="salesTableView">
+            <columns>
+                <TableColumn fx:id="saleDateTimeColumn" style="-fx-alignment: CENTER_LEFT;" text="Date/Time">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="saleDate" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="numberOfTicketsColumn" style="-fx-alignment: CENTER_LEFT;" text="Number of Tickets">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="numberOfTickets" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="customerColumn" style="-fx-alignment: CENTER_LEFT;" text="Customer">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="customerName" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="showingColumn" style="-fx-alignment: CENTER_LEFT;" text="Showing">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="showing" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </children>
+</VBox>

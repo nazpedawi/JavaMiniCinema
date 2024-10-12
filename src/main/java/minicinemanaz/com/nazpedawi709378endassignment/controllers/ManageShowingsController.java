@@ -138,13 +138,13 @@ public class ManageShowingsController implements Initializable {
     public void onDeleteShowingClick() {
         Showing selectedShowing = showingsTableView.getSelectionModel().getSelectedItem();
         if (selectedShowing != null) {
-            if (selectedShowing.hasTicketsSold()) {
-                errorMessageLabel.setText("Cannot delete, Tickets have already been sold for this showing.");
-            } else {
+           // if (selectedShowing.hasTicketsSold()) {
+             //   errorMessageLabel.setText("Cannot delete, Tickets have already been sold for this showing.");
+            //} else {
                database.removeShowing(selectedShowing);
                 loadShowings(); // Refresh the table
                 errorMessageLabel.setText("");
-            }
+            //}
         }
     }
 

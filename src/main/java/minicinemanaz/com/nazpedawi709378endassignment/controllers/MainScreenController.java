@@ -88,6 +88,11 @@ public class MainScreenController implements Initializable {
         loadView("selltickets-view.fxml", new SellTicketsController());
     }
 
+    public void onViewSalesHistoryClick(ActionEvent actionEvent) {
+        viewSalesHistoryButton.setStyle("-fx-background-color: white; -fx-text-fill: green;");
+        loadView("saleshistory-view.fxml", new SalesHistoryController());
+    }
+
     private void loadView(String fxmlFileName, Object controller) {
         try {
             FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource(fxmlFileName));
