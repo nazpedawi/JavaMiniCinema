@@ -2,10 +2,8 @@ package minicinemanaz.com.nazpedawi709378endassignment.controllers;
 
 import minicinemanaz.com.nazpedawi709378endassignment.MiniCinemaApplication;
 import minicinemanaz.com.nazpedawi709378endassignment.data.Database;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,14 +14,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import minicinemanaz.com.nazpedawi709378endassignment.models.User;
 import minicinemanaz.com.nazpedawi709378endassignment.models.UserRole;
-
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
 
-public class MainScreenController implements Initializable {
+public class MainScreenController {
+    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
     @FXML
     private Button manageShowingsButton;
     @FXML
@@ -32,75 +28,72 @@ public class MainScreenController implements Initializable {
     private Button sellTicketsButton;
     @FXML
     private HBox buttonContainer;
-
     @FXML
     VBox layout;
 
-    private VBox labelsVBox;
-    private Label usernameLabel;
-    private Label roleLabel;
-    private Label datetimeLabel;
+    private final Database database;
 
-    private Database database;
-
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        database = new Database();
+    public MainScreenController(Database database) {
+        this.database = database;
     }
 
     public void initializeMainScreen(User user) {
-        labelsVBox = new VBox();
+        layout.getChildren().add(createLabelsVBox(user)); // add labels to welcome the logged-in user
+        showButtonsBasedOnRole(user.getRole()); // show specific buttons based on the logged-in user's role
+    }
+
+    private VBox createLabelsVBox(User user) {
+        VBox labelsVBox = new VBox();
         labelsVBox.setAlignment(Pos.CENTER);
         labelsVBox.setPadding(new Insets(50, 0, 0, 0));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String currentDateTime = LocalDateTime.now().format(formatter);
 
-        usernameLabel = new Label();
-        usernameLabel.setFont(Font.font("System", 20));
-        usernameLabel.setStyle("-fx-font-size: 18;");
-        usernameLabel.setText("Welcome " + user.getFullName() + "!");
-
-        roleLabel = new Label();
-        roleLabel.setFont(Font.font(14));
-        roleLabel.setStyle("-fx-font-size: 18;");
-        roleLabel.setText("You are logged in as " + user.getRole().name());
-
-        datetimeLabel = new Label();
-        datetimeLabel.setFont(Font.font(14));
-        datetimeLabel.setText("The current date and time is " + currentDateTime);
+        Label usernameLabel = createLabel("Welcome " + user.getFullName() + "!", 20);
+        Label roleLabel = createLabel("You are logged in as " + user.getRole().name(), 14);
+        Label datetimeLabel = createLabel("The current date and time is " + currentDateTime, 14);
 
         labelsVBox.getChildren().addAll(usernameLabel, roleLabel, datetimeLabel);
+        return labelsVBox;
+    }
 
-        layout.getChildren().add(labelsVBox);
-
-        showButtonsBasedOnRole(user.getRole());
+    // for code reusability
+    private Label createLabel(String text, int fontSize) {
+        Label label = new Label(text);
+        label.setFont(Font.font("System", fontSize));
+        label.setStyle("-fx-font-size: " + fontSize + ";");
+        return label;
     }
 
     @FXML
-    public void onManageShowingsClick(ActionEvent actionEvent) {
+    public void onManageShowingsClick() {
         manageShowingsButton.setStyle("-fx-background-color: white; -fx-text-fill: green;");
-        loadView("manageshowings-view.fxml", new ManageShowingsController());
+        viewSalesHistoryButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+        loadView("ManageShowings-view.fxml", new ManageShowingsController(database));
     }
 
-    public void onSellTicketsClick(ActionEvent actionEvent) {
+    @FXML
+    public void onSellTicketsClick() {
         sellTicketsButton.setStyle("-fx-background-color: white; -fx-text-fill: green;");
-        loadView("selltickets-view.fxml", new SellTicketsController());
+        loadView("SellTickets-view.fxml", new SellTicketsController(database));
     }
 
-    public void onViewSalesHistoryClick(ActionEvent actionEvent) {
+    @FXML
+    public void onViewSalesHistoryClick() {
         viewSalesHistoryButton.setStyle("-fx-background-color: white; -fx-text-fill: green;");
-        loadView("saleshistory-view.fxml", new SalesHistoryController());
+        manageShowingsButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+        loadView("SalesHistory-view.fxml", new SalesHistoryController(database));
     }
 
-    private void loadView(String fxmlFileName, Object controller) {
+    public void loadView(String fxmlFileName, Object controller) {
         try {
             FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource(fxmlFileName));
             loader.setController(controller);
             Scene scene = new Scene(loader.load());
             if (layout.getChildren().size() > 1)
-                layout.getChildren().remove(1);
-            layout.getChildren().add(scene.getRoot());
+                layout.getChildren().remove(1); // remove all the content of the bottom half of the screen
+            layout.getChildren().add(scene.getRoot()); // add the new scene to the bottom
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -109,7 +102,7 @@ public class MainScreenController implements Initializable {
     private void showButtonsBasedOnRole(UserRole role) {
         buttonContainer.getChildren().clear();
         if (role == UserRole.Management) {
-            buttonContainer.getChildren().add(manageShowingsButton); //
+            buttonContainer.getChildren().add(manageShowingsButton);
             buttonContainer.getChildren().add(viewSalesHistoryButton);
         } else if (role == UserRole.Sales) {
             buttonContainer.getChildren().add(sellTicketsButton);

@@ -1,8 +1,8 @@
 package minicinemanaz.com.nazpedawi709378endassignment.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,17 +16,14 @@ import minicinemanaz.com.nazpedawi709378endassignment.data.Database;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Sale;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Seat;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
-
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.time.format.DateTimeFormatter;
 
-public class SelectSeatsController {
-
+public class SelectSeatsController implements Initializable {
+    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
     @FXML
     private Button cancelButton;
 
@@ -45,19 +42,20 @@ public class SelectSeatsController {
     @FXML
     private TextField customerNameField;
 
-    private Showing selectedShowing;
-    private Seat[][] seats;
-    private Set<Seat> selectedSeats = new HashSet<>();
-    private Database database;
-    private VBox previousLayout;
-    public SelectSeatsController(Showing selectedShowing, Database database, VBox previousLayout) {
+    @FXML
+    private VBox layout;
+
+    private final Showing selectedShowing;
+    private final Set<Seat> selectedSeats = new HashSet<>();
+    private final Database database;
+
+    public SelectSeatsController(Showing selectedShowing, Database database) {
         this.selectedShowing = selectedShowing;
         this.database = database;
-        this.previousLayout = previousLayout;
     }
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         if (selectedShowing != null) {
             selectedShowingLabel.setText("Selected Showing: " + selectedShowing.getStartDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + " " + selectedShowing.getTitle());
         }
@@ -65,11 +63,11 @@ public class SelectSeatsController {
         initializeSeatButtons();
         updateSellTicketsButtonState();
     }
+
     private void initializeSeatButtons() {
         int rows = 6;
         int cols = 12;
         List<Seat> showingSeats = selectedShowing.getSeats();
-        seats = new Seat[rows][cols];
 
         for (int row = 0; row < rows; row++) {
             Label rowLabel = new Label("Row " + (row + 1));
@@ -78,11 +76,8 @@ public class SelectSeatsController {
             for (int col = 0; col < cols; col++) {
                 int seatIndex = row * cols + col;
                 Seat seat = showingSeats.get(seatIndex);  // Get the seat from the showing
-                seats[row][col] = seat; // Store seat reference
 
                 Button seatButton = new Button(String.valueOf(col + 1));
-                seatButton.setPrefWidth(30);
-                seatButton.setPrefHeight(30);
 
                 if (seat.isReserved()) {
                     seatButton.setStyle("-fx-background-color: #FF0000; -fx-text-fill: white;");
@@ -116,34 +111,23 @@ public class SelectSeatsController {
     }
 
     @FXML
-    private void onSellTicketsClick(ActionEvent event) throws IOException{
+    private void onSellTicketsClick() throws IOException{
         String customerName = customerNameField.getText();
         int numberOfTickets = selectedSeats.size();
 
         Sale sale = new Sale(LocalDateTime.now(), customerName, numberOfTickets, selectedShowing);
         database.addSale(sale);
-        database.reserveSeats(selectedShowing, new ArrayList<>(selectedSeats));
+        database.reserveSeats(selectedShowing, new ArrayList<Seat>(selectedSeats));
 
         selectedSeats.clear();
         selectedSeatsListView.getItems().clear();
         customerNameField.clear();
-        FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource("selltickets-view.fxml"));
-        SellTicketsController controller = new SellTicketsController();
-        loader.setController(controller);
-        Scene newScene = new Scene(loader.load());
-        previousLayout.getChildren().clear();
-        previousLayout.getChildren().add(newScene.getRoot());
-
+        returnToSellTickets();
     }
 
     @FXML
-    private void onCancelClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource("selltickets-view.fxml"));
-        SellTicketsController controller = new SellTicketsController();
-        loader.setController(controller);
-        Scene newScene = new Scene(loader.load());
-        previousLayout.getChildren().clear();
-        previousLayout.getChildren().add(newScene.getRoot());
+    private void onCancelClick() throws IOException {
+        returnToSellTickets();
     }
 
     private void updateSellTicketsButtonState() {
@@ -152,4 +136,14 @@ public class SelectSeatsController {
         sellTicketsButton.setDisable(hasNoSelectedSeats || hasNoCustomerName);
     }
 
+    private void returnToSellTickets () throws IOException {
+        FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource("SellTickets-view.fxml"));
+        SellTicketsController controller = new SellTicketsController(database);
+        loader.setController(controller);
+        Scene newScene = new Scene(loader.load());
+        if (!layout.getChildren().isEmpty()){
+            layout.getChildren().removeAll(layout.getChildren());
+        }
+        layout.getChildren().add(newScene.getRoot());
+    }
 }

@@ -9,7 +9,6 @@ import javafx.scene.control.TableView;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Sale;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
 import minicinemanaz.com.nazpedawi709378endassignment.data.Database;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,7 +16,7 @@ import java.util.ResourceBundle;
 import java.net.URL;
 
 public class SalesHistoryController implements Initializable {
-
+    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
     @FXML
     private TableView<Sale> salesTableView;
     @FXML
@@ -29,9 +28,12 @@ public class SalesHistoryController implements Initializable {
     protected Database database;
     protected final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
+    public SalesHistoryController(Database database) {
+        this.database = database;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        database = new Database();
         salesData = FXCollections.observableArrayList(database.getSales());
         salesTableView.setItems(salesData);
 

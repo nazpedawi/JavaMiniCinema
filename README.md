@@ -1,4 +1,3 @@
-# Application Login Credentials
 
 Below are the usernames and passwords needed to log into the application.
 

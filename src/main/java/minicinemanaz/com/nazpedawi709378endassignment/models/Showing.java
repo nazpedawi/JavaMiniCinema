@@ -11,16 +11,15 @@ public class Showing implements Serializable, Comparable<Showing> {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int seatsLeft;
-    private final int maxSeats = 72;
-    private String id;
-    private List<Seat> seats;
+    private final String id;
+    private final List<Seat> seats;
 
     public Showing(String title, LocalDateTime startDate, LocalDateTime endDate, List<Seat> seats) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString(); // generates a random id for every showing when it gets created,
+                                                // this id is used later to edit the showing in 'manage showings'
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.seatsLeft = maxSeats;
         this.seats = seats;
         this.seatsLeft = seats.size();
     }
@@ -56,24 +55,25 @@ public class Showing implements Serializable, Comparable<Showing> {
     public int getSeatsLeft() {
         return seatsLeft;
     }
+
     public int getMaxSeats() {
-        return maxSeats;
+        return seats.size();
     }
+
     public boolean hasTicketsSold() {
-        return seatsLeft < maxSeats;
-    }
+        return seatsLeft < seats.size();
+    }  // if seats left are less than 72 that means tickets have already been sold
+
     public void setSeatsLeft(int seatsLeft) {
         this.seatsLeft = seatsLeft;
     }
+
     public List<Seat> getSeats() {
         return seats;
-    }
-    public void setSeats(List<Seat> seats) {
-        this.seats = seats;
     }
 
     @Override
     public int compareTo(Showing other) {
-        return this.startDate.compareTo(other.startDate);
+        return this.getStartDate().compareTo(other.getStartDate());
     }
 }

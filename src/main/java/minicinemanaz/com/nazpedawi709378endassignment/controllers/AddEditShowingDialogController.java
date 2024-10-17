@@ -1,8 +1,7 @@
 package minicinemanaz.com.nazpedawi709378endassignment.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 import minicinemanaz.com.nazpedawi709378endassignment.data.Database;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
@@ -12,15 +11,17 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import java.io.IOException;
+import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class AddEditShowingDialogController {
+public class AddEditShowingDialogController implements Initializable {
+    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
     @FXML
     private TextField titleField;
     @FXML
@@ -34,39 +35,37 @@ public class AddEditShowingDialogController {
     @FXML
     private Button confirmButton;
     @FXML
-    private Button cancelButton;
-    @FXML
     private Label dialogTitleLabel;
     @FXML
     private Label  errorMessageLabel;
 
-    Database database;
+    private final Database database;
+    private Showing currentShowing;
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public Showing showing;
     public Showing getShowing() {
         return showing;
     }
-    private Showing currentShowing;
-    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-    public Showing showing;
+
     public AddEditShowingDialogController(Database database){
         this.database = database;
     }
 
-    public void showAddDialog(Database database) {
-        this.database = database;
-        dialogTitleLabel.setText("Add Showing");
-        confirmButton.setText("Add");
-        currentShowing = null;
-        clearFields();
-        Platform.runLater(() -> titleField.requestFocus());
-
-        startDatePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-                if (newValue != null) {
-                    endDatePicker.setValue(newValue); // Set end date to start date
-                }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                endDatePicker.setValue(newValue); // Set end date to start date
             }
         });
+    }
+
+    public void showAddDialog() {
+        dialogTitleLabel.setText("Add Showing");
+        confirmButton.setText("Add");
+        clearFields();
+        Platform.runLater(() -> titleField.requestFocus());
     }
 
     private void clearFields() {
@@ -77,8 +76,7 @@ public class AddEditShowingDialogController {
         endTimeField.clear();
     }
 
-    public void showEditDialog(Showing showing, Database database) {
-        this.database = database;
+    public void showEditDialog(Showing showing) {
         dialogTitleLabel.setText("Edit Showing");
         confirmButton.setText("Save Changes");
         currentShowing = showing;
@@ -95,56 +93,130 @@ public class AddEditShowingDialogController {
     }
 
     @FXML
-    private void onConfirmButtonClick(ActionEvent actionEvent) throws IOException {
-        String title = titleField.getText();
-        LocalDate startDate = startDatePicker.getValue();
-        LocalTime startTime = null;
-        LocalDate endDate = endDatePicker.getValue();
-        LocalTime endTime = null;
-
-        if (title.isEmpty()) {
-            errorMessageLabel.setText("Validation failed: Title cannot be empty.");
-        }
-
-        if (startDate == null) {
-            errorMessageLabel.setText("Validation failed: Please select a start date.");
-        }
-
-        try {
-            startTime = LocalTime.parse(startTimeField.getText(), timeFormatter);
-        } catch (DateTimeParseException e) {
-            errorMessageLabel.setText("Invalid start time format. Use HH:mm.");
-        }
-
-        try {
-            endTime = LocalTime.parse(endTimeField.getText(), timeFormatter);
-        } catch (DateTimeParseException e) {
-            errorMessageLabel.setText("Invalid end time format. Use HH:mm.");
-        }
-
-        if (startDate.atTime(startTime).isAfter(endDate.atTime(endTime))) {
-            errorMessageLabel.setText("Validation failed: Start time must be before end time.");
-        }
-
+    private void onConfirmButtonClick(ActionEvent actionEvent){
+        if (!validateInput()) return;
         List<Seat> seats = initializeSeats();
 
         if (currentShowing == null) {
-            showing = new Showing(title, startDate.atTime(startTime), endDate.atTime(endTime),  seats);
-            database.addShowing(showing);
+            createNewShowing(seats);
         } else {
-
-            System.out.println("Editing existing showing: " + currentShowing.getTitle());
-            currentShowing.setTitle(title);
-            currentShowing.setStartDate(startDate.atTime(startTime));
-            currentShowing.setEndDate(endDate.atTime(endTime));
-            currentShowing.getSeats();
-            database.updateShowing(currentShowing);
+            updateExistingShowing();
         }
+
+       closeStage(actionEvent);
+    }
+
+    private void closeStage(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
+
+    private boolean validateInput() {
+        setErrorMessage("");
+
+        if (!validateTitle()) return false;
+        LocalDate startDate = getValidatedStartDate();
+        if (startDate == null) return false;
+        LocalTime startTime = getValidatedStartTime();
+        if (startTime == null) return false;
+        LocalDate endDate = getValidatedEndDate();
+        if (endDate == null) return false;
+        LocalTime endTime = getValidatedEndTime();
+        if (endTime == null) return false;
+
+        if (!validateTimeOrder(startDate, startTime, endDate, endTime)) return false;
+
+        return validateShowingUniqueness(startDate, startTime, endDate, endTime);
+    }
+
+    private boolean validateTitle() {
+        String title = titleField.getText();
+        if (title.isEmpty()) {
+            setErrorMessage("Error: Title cannot be empty.");
+            return false;
+        }
+        return true;
+    }
+
+    private LocalDate getValidatedStartDate() {
+        return parseDate(startDatePicker, "Invalid start date format. Use DD/MM/YYYY.");
+    }
+
+    private LocalTime getValidatedStartTime() {
+        return parseTime(startTimeField.getText(), "Invalid start time format. Use HH:MM.");
+    }
+
+    private LocalDate getValidatedEndDate() {
+        return parseDate(endDatePicker, "Invalid end date format. Use DD/MM/YYYY.");
+    }
+
+    private LocalTime getValidatedEndTime() {
+        return parseTime(endTimeField.getText(), "Invalid end time format. Use HH:MM.");
+    }
+
+    private boolean validateTimeOrder(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        if (startDate.atTime(startTime).isAfter(endDate.atTime(endTime))) {
+            setErrorMessage("Error: End time must be after Start time.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateShowingUniqueness(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        if (database.showingExists(titleField.getText(), startDate.atTime(startTime), endDate.atTime(endTime))) {
+            setErrorMessage("Error: This showing already exists.");
+            return false;
+        }
+        return true;
+    }
+
+    private LocalDate parseDate(DatePicker datePicker, String errorMessage) {
+        String dateText = datePicker.getEditor().getText();
+        try {
+            return LocalDate.parse(dateText, dateFormatter);
+        } catch (DateTimeParseException e) {
+            setErrorMessage(errorMessage);
+            return null;
+        }
+    }
+
+    private LocalTime parseTime(String timeString, String errorMessage) {
+        try {
+            return LocalTime.parse(timeString, timeFormatter);
+        } catch (DateTimeParseException e) {
+            setErrorMessage(errorMessage);
+            return null;
+        }
+    }
+
+    private void createNewShowing(List<Seat> seats) {
+        LocalDate startDate = startDatePicker.getValue();
+        LocalTime startTime = LocalTime.parse(startTimeField.getText(), timeFormatter);
+        LocalDate endDate = endDatePicker.getValue();
+        LocalTime endTime = LocalTime.parse(endTimeField.getText(), timeFormatter);
+
+            showing = new Showing(titleField.getText(), startDate.atTime(startTime), endDate.atTime(endTime), seats);
+            database.addShowing(showing);
+    }
+
+    private void updateExistingShowing() {
+        LocalDate startDate = startDatePicker.getValue();
+        LocalTime startTime = LocalTime.parse(startTimeField.getText(), timeFormatter);
+        LocalDate endDate = endDatePicker.getValue();
+        LocalTime endTime = LocalTime.parse(endTimeField.getText(), timeFormatter);
+
+            currentShowing.setTitle(titleField.getText());
+            currentShowing.setStartDate(startDate.atTime(startTime));
+            currentShowing.setEndDate(endDate.atTime(endTime));
+            database.updateShowing(currentShowing);
+    }
+
+    private void setErrorMessage(String message) {
+        errorMessageLabel.setText(message);
+    }
+
     @FXML
-    private void handleKeyPress(KeyEvent event) throws IOException {
+    private void handleKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             if (titleField.isFocused()) {
                 startDatePicker.requestFocus();
@@ -161,9 +233,8 @@ public class AddEditShowingDialogController {
     }
 
     @FXML
-    private void onCancelButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
+    private void onCancelButtonClick(ActionEvent actionEvent){
+        closeStage(actionEvent);
     }
 
     private List<Seat> initializeSeats() {
@@ -173,12 +244,11 @@ public class AddEditShowingDialogController {
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                Seat seat = new Seat(row + 1, col + 1, false); // Assuming you have a constructor that takes row and column
+                Seat seat = new Seat(row + 1, col + 1, false);
                 seats.add(seat);
             }
         }
         return seats;
     }
-
 }
 

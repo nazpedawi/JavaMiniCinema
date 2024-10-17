@@ -14,13 +14,13 @@
 
                 <Label text="Start Date/Time" />
                 <HBox spacing="10">
-                    <DatePicker fx:id="startDatePicker" onKeyPressed="#handleKeyPress" promptText="Date (DD-MM-YYYY)" />
+                    <DatePicker fx:id="startDatePicker" onKeyPressed="#handleKeyPress" promptText="Date (DD/MM/YYYY)" />
                     <TextField fx:id="startTimeField" onKeyPressed="#handleKeyPress" promptText="Time (HH:MM)" />
                 </HBox>
 
                 <Label text="End Date/Time" />
                 <HBox spacing="10">
-                    <DatePicker fx:id="endDatePicker" onKeyPressed="#handleKeyPress" promptText="Date (DD-MM-YYYY)" />
+                    <DatePicker fx:id="endDatePicker" onKeyPressed="#handleKeyPress" promptText="Date (DD/MM/YYYY)" />
                     <TextField fx:id="endTimeField" onKeyPressed="#handleKeyPress" promptText="Time (HH:MM)" />
                 </HBox>
 

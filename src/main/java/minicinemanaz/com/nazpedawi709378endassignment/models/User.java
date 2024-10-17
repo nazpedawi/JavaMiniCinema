@@ -3,11 +3,13 @@ package minicinemanaz.com.nazpedawi709378endassignment.models;
 import java.io.Serializable;
 public class User implements Serializable{
     private static final long serialVersionUID = 1L;
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
-    private UserRole role;
+
+    // added 'final' to them because otherwise it was giving warnings
+    private final String firstName;
+    private final String lastName;
+    private final String username;
+    private final String password;
+    private final UserRole role;
 
     public User(String firstName, String lastName,String username, String password, UserRole role) {
         this.firstName = firstName;
@@ -22,7 +24,7 @@ public class User implements Serializable{
     public String getLastName() { return lastName;}
 
     public String getFullName() {
-        return firstName + " " + lastName;
+        return getFirstName() + " " + getLastName();
     }
 
     public String getUsername() {
