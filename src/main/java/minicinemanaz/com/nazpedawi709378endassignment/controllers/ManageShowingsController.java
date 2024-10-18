@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 
 public class ManageShowingsController implements Initializable {
-    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
+    // gives warnings saying they are never assigned, but they are assigned in FXML, not in code here.
     @FXML
     private TableView<Showing> showingsTableView;
     @FXML
@@ -52,7 +52,7 @@ public class ManageShowingsController implements Initializable {
         loadShowings();
     }
 
-    // format the columns in a specific way, such as dates in dd-mm-yyyy format and seats left in --/-- format
+    // format the columns in a specific way, display dates in dd-mm-yyyy format and seats left in --/-- format
     protected void setupColumns() {
         startDateColumn.setCellValueFactory(cellData -> createStringProperty(cellData.getValue().getStartDate().format(dateFormatter)));
         endDateColumn.setCellValueFactory(cellData -> createStringProperty(cellData.getValue().getEndDate().format(dateFormatter)));
@@ -68,7 +68,7 @@ public class ManageShowingsController implements Initializable {
 
     public void loadShowings() {
         showingsData = FXCollections.observableArrayList(database.getShowings());
-        Collections.sort(showingsData);
+        Collections.sort(showingsData); // sort the showings in ascending order
         showingsTableView.setItems(showingsData);
     }
 
@@ -93,19 +93,18 @@ public class ManageShowingsController implements Initializable {
             Scene scene = new Scene(loader.load());
 
             if (showing == null) {
-                addEditController.showAddDialog(); // Show add new showing dialog if showing is null
+                addEditController.showAddDialog(); // display add new showing dialog if showing is null
             } else {
-                addEditController.showEditDialog(showing); // Show edit dialog if showing is provided
+                addEditController.showEditDialog(showing); // display edit dialog if showing is provided
             }
 
             Stage dialog = new Stage();
             dialog.setScene(scene);
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.showAndWait();
-            if (showing == null && addEditController.getShowing() != null) {
-                showingsData.add(addEditController.getShowing());
-            }
             loadShowings();
+            showingsTableView.refresh();
+            reset();
         } catch (IOException e) {
             System.out.println("Error loading Add/Edit Showing Dialog: " + e.getMessage());
         }
@@ -116,22 +115,30 @@ public class ManageShowingsController implements Initializable {
         Showing selectedShowing = showingsTableView.getSelectionModel().getSelectedItem();
         if (selectedShowing != null) {
            if (selectedShowing.hasTicketsSold()) {
-                errorMessageLabel.setText("Error: Cannot delete the selected showing, tickets have already been sold for it.");
+                errorMessageLabel.setText("Error: Cannot delete the selected showing, tickets have already been sold.");
             } else {
                database.removeShowing(selectedShowing);
                 loadShowings();
-                errorMessageLabel.setText("");
+               errorMessageLabel.setText("");
             }
+            reset();
         }
     }
 
-    // to enable the edit and delete buttons when a show is selected
+    // to enable the edit and delete buttons when a showing is selected
     @FXML
     public void handleTableClick() {
         Showing selectedShowing = showingsTableView.getSelectionModel().getSelectedItem();
         if (selectedShowing != null) {
             editShowingButton.setDisable(false);
             deleteShowingButton.setDisable(false);
+            errorMessageLabel.setText("");
         }
+    }
+
+    private void reset(){
+        editShowingButton.setDisable(true);
+        deleteShowingButton.setDisable(true);
+        showingsTableView.getSelectionModel().clearSelection();
     }
 }

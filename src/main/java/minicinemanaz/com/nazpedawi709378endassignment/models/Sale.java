@@ -35,8 +35,9 @@ public class Sale implements Serializable, Comparable<Sale> {
         return showing;
     }
 
+    // to see newly added sale at the top of the table view
     @Override
     public int compareTo(Sale other) {
-        return this.getSaleDate().compareTo(other.getSaleDate());
+        return other.getSaleDate().compareTo(this.getSaleDate());
     }
 }

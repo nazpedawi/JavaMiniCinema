@@ -4,33 +4,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="layout" prefHeight="516.0" prefWidth="726.0" style="-fx-spacing: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
+<VBox prefHeight="516.0" prefWidth="726.0" style="-fx-spacing: 10;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
       <Label style="-fx-font-size: 18;" text="Sell Tickets" />
       <Label fx:id="selectedShowingLabel" style="-fx-font-weight: bold;" />
 
       <HBox alignment="CENTER" prefHeight="10.0">
-          <Label style="-fx-font-weight: bold; -fx-text-fill: black; -fx-padding: 0 0 0 50;" text="------------------------------ View Screen ------------------------------" />
+          <Label style="-fx-font-weight: bold; -fx-text-fill: black; -fx-padding: 0 0 0 80;" text="------------------------------ View Screen ------------------------------" />
 
           <Region HBox.hgrow="ALWAYS" />
 
           <Label style="-fx-font-weight: bold; -fx-text-fill: black; -fx-padding: 0 30 0 0;" text="Selected Seats" />
       </HBox>
              <HBox prefHeight="325.0" prefWidth="662.0" HBox.hgrow="ALWAYS">
-                 <children>
             <GridPane fx:id="seatsGrid" hgap="10" style="-fx-padding: 20;" vgap="10" HBox.hgrow="ALWAYS">
             </GridPane>
                  <ListView fx:id="selectedSeatsListView" prefHeight="399.0" prefWidth="138.0" style="-fx-border-color: black; -fx-border-width: 1;" />
-         </children>
       </HBox>
       <TextField fx:id="customerNameField" promptText="Customer Name" style="-fx-padding: 10;" />
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-         <children>
             <Button fx:id="sellTicketsButton" onAction="#onSellTicketsClick" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-cursor: hand;" />
             <Button fx:id="cancelButton" onAction="#onCancelClick" style="-fx-background-color: #808080; -fx-text-fill: white; -fx-cursor: hand;" text="Cancel" />
-         </children>
       </HBox>
-   </children>
    <padding>
       <Insets left="14.0" right="50.0" top="7.0" />
    </padding>

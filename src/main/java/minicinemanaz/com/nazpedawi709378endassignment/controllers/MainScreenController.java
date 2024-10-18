@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class MainScreenController {
-    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
+    // gives warnings saying they are never assigned, but they are assigned in FXML, not in code here.
     @FXML
     private Button manageShowingsButton;
     @FXML
@@ -93,7 +93,7 @@ public class MainScreenController {
             Scene scene = new Scene(loader.load());
             if (layout.getChildren().size() > 1)
                 layout.getChildren().remove(1); // remove all the content of the bottom half of the screen
-            layout.getChildren().add(scene.getRoot()); // add the new scene to the bottom
+            layout.getChildren().add(scene.getRoot()); // add the new scene to the bottom half
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -10,7 +10,6 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <children>
       <Label text="Fantastic Cinema Login">
          <font>
             <Font name="Verdana Pro Semibold" size="26.0" />
@@ -29,7 +28,6 @@
           <RowConstraints maxHeight="38.3333257039388" minHeight="10.0" prefHeight="26.999999999999993" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="47.33333333333334" minHeight="10.0" prefHeight="38.33333333333334" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
             <Label text="Username" GridPane.vgrow="NEVER">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -46,7 +44,6 @@
                <GridPane.margin>
                   <Insets bottom="10.0" />
                </GridPane.margin></PasswordField>
-         </children>
       </GridPane>
       <Label fx:id="errorLabel" opacity="0.0" style="-fx-text-fill: red;">
          <VBox.margin>
@@ -67,5 +64,4 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-   </children>
 </VBox>

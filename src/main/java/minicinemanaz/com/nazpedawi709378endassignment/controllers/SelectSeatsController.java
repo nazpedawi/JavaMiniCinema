@@ -1,22 +1,19 @@
 package minicinemanaz.com.nazpedawi709378endassignment.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Cursor;
-import javafx.scene.layout.VBox;
-import minicinemanaz.com.nazpedawi709378endassignment.MiniCinemaApplication;
+import javafx.stage.Stage;
 import minicinemanaz.com.nazpedawi709378endassignment.data.Database;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Sale;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Seat;
 import minicinemanaz.com.nazpedawi709378endassignment.models.Showing;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -24,9 +21,6 @@ import java.time.format.DateTimeFormatter;
 
 public class SelectSeatsController implements Initializable {
     // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
-    @FXML
-    private Button cancelButton;
-
     @FXML
     private Label selectedShowingLabel;
 
@@ -41,9 +35,6 @@ public class SelectSeatsController implements Initializable {
 
     @FXML
     private TextField customerNameField;
-
-    @FXML
-    private VBox layout;
 
     private final Showing selectedShowing;
     private final Set<Seat> selectedSeats = new HashSet<>();
@@ -111,7 +102,7 @@ public class SelectSeatsController implements Initializable {
     }
 
     @FXML
-    private void onSellTicketsClick() throws IOException{
+    private void onSellTicketsClick(ActionEvent event) {
         String customerName = customerNameField.getText();
         int numberOfTickets = selectedSeats.size();
 
@@ -122,12 +113,12 @@ public class SelectSeatsController implements Initializable {
         selectedSeats.clear();
         selectedSeatsListView.getItems().clear();
         customerNameField.clear();
-        returnToSellTickets();
+        returnToSellTickets(event);
     }
 
     @FXML
-    private void onCancelClick() throws IOException {
-        returnToSellTickets();
+    private void onCancelClick(ActionEvent event) {
+        returnToSellTickets(event);
     }
 
     private void updateSellTicketsButtonState() {
@@ -136,14 +127,8 @@ public class SelectSeatsController implements Initializable {
         sellTicketsButton.setDisable(hasNoSelectedSeats || hasNoCustomerName);
     }
 
-    private void returnToSellTickets () throws IOException {
-        FXMLLoader loader = new FXMLLoader(MiniCinemaApplication.class.getResource("SellTickets-view.fxml"));
-        SellTicketsController controller = new SellTicketsController(database);
-        loader.setController(controller);
-        Scene newScene = new Scene(loader.load());
-        if (!layout.getChildren().isEmpty()){
-            layout.getChildren().removeAll(layout.getChildren());
-        }
-        layout.getChildren().add(newScene.getRoot());
+    private void returnToSellTickets (ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

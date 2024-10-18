@@ -5,13 +5,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.io.*;
 
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L; // For serialization
     private static final String FILE_NAME = "database.dat"; // File for serialization
-    private List<User> users;
+    private final List<User> users;
     private List<Showing> showings;
     private List<Sale> sales;
 
@@ -34,7 +33,7 @@ public class Database implements Serializable {
     public List<Sale> getSales() { return sales; }
 
     public User findUser(String username, String password) {
-        for (User user : users) {
+        for (User user : getUsers()) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return user;
             }
@@ -68,7 +67,7 @@ public class Database implements Serializable {
                 existingShowing.setSeatsLeft(updatedShowing.getSeatsLeft());
 
                 showings.set(i, existingShowing); // Replace the old showing with the updated one
-                save(); // Persist the updated data
+                save();
                 System.out.println("Showing updated successfully.");
                 return;
             }
@@ -116,7 +115,7 @@ public class Database implements Serializable {
             Database loadedDatabase = (Database) ois.readObject();
             this.showings = loadedDatabase.showings;
             this.sales = loadedDatabase.sales;
-            System.out.println("Database loaded successfully. Loaded " + showings.size() + " showings." + sales.size() + " sales.");
+            System.out.println("Database loaded successfully. Loaded " + showings.size() + " showings, and " + sales.size() + " sales.");
         } catch (FileNotFoundException e) {
             System.out.println("No previous database found. A new one will be created.");
         } catch (IOException | ClassNotFoundException e) {

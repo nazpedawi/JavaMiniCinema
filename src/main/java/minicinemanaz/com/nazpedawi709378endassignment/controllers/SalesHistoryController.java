@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import java.net.URL;
 
 public class SalesHistoryController implements Initializable {
-    // gives warnings saying they are never assigned but, they are assigned in FXML not in code here
+    // gives warnings saying they are never assigned, but they are assigned in FXML, not in code here.
     @FXML
     private TableView<Sale> salesTableView;
     @FXML
